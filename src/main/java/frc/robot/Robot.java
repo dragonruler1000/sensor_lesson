@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -18,9 +22,10 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 public class Robot extends TimedRobot {
 
   Joystick testJoystick;
-  PWMSparkMax testmPwmSparkMax;
+  CANSparkMax testMotor;
   DigitalInput testLimitSwitchup;
   DigitalInput testLimitSwitchdown;
+  RelativeEncoder encoder;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -29,7 +34,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     testJoystick = new Joystick(0);
-    testmPwmSparkMax = new PWMSparkMax(0);
+    testMotor = new CANSparkMax(1, MotorType.kBrushless);
+    encoder = testMotor.getEncoder();
     testLimitSwitchup = new DigitalInput(0);
     testLimitSwitchdown = new DigitalInput(1);
   }
@@ -68,7 +74,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     double speed = -testJoystick.getY();
-    testmPwmSparkMax.set(speed);
+    testMotor.set(speed);
     boolean istopPressed = testLimitSwitchup.get();
     boolean isbottomPressed = testLimitSwitchdown.get();
 
@@ -79,11 +85,11 @@ public class Robot extends TimedRobot {
     if(stopGoingUp || stopGoingDown)
     {
       // Hey don't go up any more
-      testmPwmSparkMax.set(0);
+      testMotor.set(0);
     }
     else 
     {
-      testmPwmSparkMax.set(speed);
+      testMotor.set(speed);
     }
   
 
