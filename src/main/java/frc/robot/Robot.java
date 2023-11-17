@@ -19,7 +19,8 @@ public class Robot extends TimedRobot {
 
   Joystick testJoystick;
   PWMSparkMax testmPwmSparkMax;
-  DigitalInput testLimitSwitchDigitalInput;
+  DigitalInput testLimitSwitchup;
+  DigitalInput testLimitSwitchdown;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -29,7 +30,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     testJoystick = new Joystick(0);
     testmPwmSparkMax = new PWMSparkMax(0);
-    testLimitSwitchDigitalInput = new DigitalInput(0);
+    testLimitSwitchup = new DigitalInput(0);
+    testLimitSwitchdown = new DigitalInput(1);
   }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -67,7 +69,24 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double speed = -testJoystick.getY();
     testmPwmSparkMax.set(speed);
-    boolean isPressed = testLimitSwitchDigitalInput.get();
+    boolean istopPressed = testLimitSwitchup.get();
+    boolean isbottomPressed = testLimitSwitchdown.get();
+
+    boolean stopGoingUp = istopPressed && speed > 0;
+    boolean stopGoingDown = isbottomPressed && speed <0;
+
+
+    if(stopGoingUp || stopGoingDown)
+    {
+      // Hey don't go up any more
+      testmPwmSparkMax.set(0);
+    }
+    else 
+    {
+      testmPwmSparkMax.set(speed);
+    }
+  
+
   }
   /** This function is called once when the robot is disabled. */
   @Override
