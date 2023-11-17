@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   DigitalInput testLimitSwitchup;
   DigitalInput testLimitSwitchdown;
   RelativeEncoder encoder;
+  MyDrive drive;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,6 +39,8 @@ public class Robot extends TimedRobot {
     encoder = testMotor.getEncoder();
     testLimitSwitchup = new DigitalInput(0);
     testLimitSwitchdown = new DigitalInput(1);
+    
+    drive = new MyDrive();
   }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -91,7 +94,9 @@ public class Robot extends TimedRobot {
     {
       testMotor.set(speed);
     }
-  
+    double leftSpeed = -testJoystick.getRawAxis(1);
+    double rightSpeed = testJoystick.getRawAxis(5);
+    drive.drive(leftSpeed,rightSpeed);
 
   }
   /** This function is called once when the robot is disabled. */

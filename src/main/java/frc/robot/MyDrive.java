@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PWM;
+//import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
@@ -37,6 +37,14 @@ DifferentialDrive drive;
     righGroup.setInverted(false);
 
     drive = new DifferentialDrive(leftGroup, righGroup);
+  }
+
+  public void drive(double leftSpeed, double rightSpeed){
+    drive.tankDrive(leftSpeed, rightSpeed);
+  }
+
+  public void stop(){
+    drive(0,0);
   }
 
   @Override
